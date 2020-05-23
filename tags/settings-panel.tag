@@ -23,6 +23,7 @@
                   <div class="item" data-value="en"><i class="gb flag"></i>English</div>
                   <div class="item" data-value="es"><i class="es flag"></i>Español</div>
                   <div class="item" data-value="fr"><i class="fr flag"></i>Français</div>
+                  <div class="item" data-value="gr"><i class="gr flag"></i>Ελληνικά</div>
                   <div class="item" data-value="it"><i class="it flag"></i>Italiano</div>
                   <div class="item" data-value="hu"><i class="hu flag"></i>Magyar</div>
                   <div class="item" data-value="pl"><i class="pl flag"></i>Polski</div>

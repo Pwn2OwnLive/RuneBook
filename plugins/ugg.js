@@ -118,13 +118,15 @@ async function getDataSource(champion) {
     let lolVersion = lolVersions[0];
     let lolVersionUGG = getUGGFormattedLolVersion(lolVersion);
 
-    const overviewVersion = "1.2.6";
-    
+    const overviewVersion = "1.4.0";
+
+    // Example: https://static.u.gg/assets/lol/riot_static/10.10.3216176/data/en_US/champion/Bard.json
     const championDataUrl = `https://static.u.gg/assets/lol/riot_static/${lolVersion}/data/en_US/champion/${champion}.json`;
 
     const championData = await getJson(championDataUrl);
     const championId = championData.data[champion].key;
 
+    // Example: https://stats2.u.gg/lol/1.1/overview/10_10/ranked_solo_5x5/432/1.4.0.json
     const championStatsUrl = `https://stats2.u.gg/lol/${uGGAPIVersion}/overview/${lolVersionUGG}/ranked_solo_5x5/${championId}/${overviewVersion}.json`;
 
     return getJson(championStatsUrl);
