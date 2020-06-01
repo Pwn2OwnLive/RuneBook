@@ -5,7 +5,7 @@ function getJson(uri) {
   return rp({ uri, json: true });
 }
 
-// http://ddragon.leagueoflegends.com/cdn/10.10.3216176/data/en_US/runesReforged.json
+// http://ddragon.leagueoflegends.com/cdn/8.23.1/data/en_US/runesReforged.json
 // tree = runes.reduce((obj, curr) => {
 //   obj[curr.id] = [].concat(...curr.slots.map(row => row.runes.map(i => i.id)));
 //   return obj;

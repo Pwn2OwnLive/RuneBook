@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Jesteś pewien, że chcesz usunąć tę stronę?",
   "settings.experimental": "Eksperymentalne",
   "settings.darktheme": "Ciemny motyw",
-  "currentpage.retry": "Ponów"
+  "currentpage.retry": "Ponów",
+  "settings.about": "About",
+  "settings.madeby": "Made by"
 }

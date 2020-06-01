@@ -63,11 +63,7 @@ const u = {
 };
 
 // KEY CONSTS - UPDATE THESE ACCORDING TO GUIDE https://gist.github.com/paolostyle/fe8ce06313d3e53c134a24762b9e519c
-const uGGDataVersion = '1.2';
 const uGGAPIVersion = '1.1';
-
-const riotVersionEndpoint = 'https://ddragon.leagueoflegends.com/api/versions.json';
-const uGGDataVersionsEndpoint = 'https://u.gg/json/new_ugg_versions/' + uGGDataVersion + '.json';
 
 const server = u.servers.world;
 const tier = u.tiers.platPlus;
@@ -111,28 +107,39 @@ function extractPage(champion) {
   };
 }
 
-async function getDataSource(champion) {
-  try {
-    const lolVersions = await getJson(riotVersionEndpoint);
+async function getDataSource(champion, version = null) {
+  let returnVal = [];
 
-    let lolVersion = lolVersions[0];
-    let lolVersionUGG = getUGGFormattedLolVersion(lolVersion);
+  // try last two lol-version
+  for (const lolVersion of freezer.get().lolversions.slice(0, 2)) {
+      try {
+          console.log(lolVersion);
+          let lolVersionUGG = getUGGFormattedLolVersion(lolVersion);
 
-    const overviewVersion = "1.4.0";
+          const overviewVersion = "1.4.0";
+          const championDataUrl = `https://static.u.gg/assets/lol/riot_static/${lolVersion}/data/en_US/champion.json`;
+          console.log(`U.GG DataUrl => ${championDataUrl}`);
 
-    // Example: https://static.u.gg/assets/lol/riot_static/10.10.3216176/data/en_US/champion/Bard.json
-    const championDataUrl = `https://static.u.gg/assets/lol/riot_static/${lolVersion}/data/en_US/champion/${champion}.json`;
+          const championData = await getJson(championDataUrl);
+          const championId = championData.data[champion].key;
+          console.log(`U.GG => ${lolVersionUGG}`);
+          const championStatsUrl = `https://stats2.u.gg/lol/${uGGAPIVersion}/overview/${lolVersionUGG}/ranked_solo_5x5/${championId}/${overviewVersion}.json`;
+          console.log(`U.GG ReqUrl => ${championStatsUrl}`);
 
-    const championData = await getJson(championDataUrl);
-    const championId = championData.data[champion].key;
+          returnVal = await getJson(championStatsUrl);
 
-    // Example: https://stats2.u.gg/lol/1.1/overview/10_10/ranked_solo_5x5/432/1.4.0.json
-    const championStatsUrl = `https://stats2.u.gg/lol/${uGGAPIVersion}/overview/${lolVersionUGG}/ranked_solo_5x5/${championId}/${overviewVersion}.json`;
+          if (returnVal.length > 0)
+              break;
+      } catch (e) {
+          if (e.name === 'StatusCodeError' && e.statusCode == 403) {
+              continue;
+          } else {
+              throw Error(e);
+          }
+      }
+  };
 
-    return getJson(championStatsUrl);
-  } catch (e) {
-    throw Error(e);
-  }
+  return returnVal;
 }
 
 async function updateBookmark(champion, pageId, callback) {

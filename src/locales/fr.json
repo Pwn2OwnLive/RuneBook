@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Êtes-vous sûr de vouloir supprimer cette page?",
   "settings.experimental": "Experimental",
   "settings.darktheme": "Dark theme",
-  "currentpage.retry": "Retry"
+  "currentpage.retry": "Retry",
+  "settings.about": "About",
+  "settings.madeby": "Made by"
 }

@@ -41,7 +41,7 @@ var perksMap = {
     "Legend: Tenacity": 9105,
     "Legend: Bloodline": 9103,
     // Precision_Tier_4
-    "Coup de Grace": 8014,
+    "Coup De Grace": 8014,
     "Cut Down": 8017,
     "Last Stand": 8299,
     // Domination_Tier_1
@@ -103,7 +103,7 @@ var perksMap = {
     "Magical Footwear": 8304,
     "Perfect Timing": 8313,
     // Inspiration_Tier_3
-    "Future's Market": 8321,
+    "Future\u2019s Market": 8321,
     "Minion Dematerializer": 8316,
     "Biscuit Delivery": 8345,
     // Inspiration_Tier_4
@@ -147,14 +147,14 @@ function exctractPage(html, pageUrl) {
 		};
 
 	var data = [];
-	$("li.rune-path--rune", path).each(function() {
-		data.push($(this).attr("data-link-title"));
+    $("li.rune-path--rune", path).each(function () {
+        data.push($(this).attr("data-link-title"));
 	});
 
 	page.primaryStyleId = stylesMap[$("div.rune-path--primary .rune-path--path", path).attr("data-content-title")];
 	page.subStyleId = stylesMap[$("div.rune-path--secondary .rune-path--path", path).attr("data-content-title")];
 
-	for(var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
 		page.selectedPerkIds[i] = perksMap[data[i]];
 	}
 

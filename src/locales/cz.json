@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Jste si jistý, že chcete odebrat tuto stránku?",
   "settings.experimental": "Experimentální",
   "settings.darktheme": "Tmavý vzhled",
-  "currentpage.retry": "Retry"
+  "currentpage.retry": "Retry",
+  "settings.about": "About",
+  "settings.madeby": "Made by"
 }

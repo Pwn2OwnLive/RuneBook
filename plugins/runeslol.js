@@ -92,7 +92,7 @@ var perksMap = {
     "Magical Footwear": 8304,
     "Perfect Timing": 8313,
     // Inspiration_Tier_3
-    "Future's Market": 8321,
+    "Future\'s Market": 8321,
     "Minion Dematerializer": 8316,
     "Biscuit Delivery": 8345,
     // Inspiration_Tier_4

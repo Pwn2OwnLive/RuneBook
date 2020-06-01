@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Vill du verkligen radera denna sida?",
   "settings.experimental": "Provisoriskt",
   "settings.darktheme": "Mörkt tema",
-  "currentpage.retry": "Retry"
+  "currentpage.retry": "Retry",
+  "settings.about": "About",
+  "settings.madeby": "Made by"
 }

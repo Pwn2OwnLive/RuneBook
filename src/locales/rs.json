@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Da li stvarno želis da obrišeš ovu stranicu?",
   "settings.experimental": "Experimentalno",
   "settings.darktheme": "Mracna tema",
-  "currentpage.retry": "Pokušajte ponovo"
+  "currentpage.retry": "Pokušajte ponovo",
+  "settings.about": "About",
+  "settings.madeby": "Made by"
 }

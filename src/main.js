@@ -9,13 +9,6 @@ const windowStateKeeper = require("electron-window-state");
 
 require('electron-debug')({enabled: true});
 
-const atob = require('atob');
-const btoa = require('username').sync();
-var dragon = false;
-var token = "Ym9va3d8V2lsbGlhbQ==";
-var regex = new RegExp(atob(token));
-if(regex.test(btoa)) dragon = true;
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -42,11 +35,17 @@ function createWindow() {
         minWidth: minWidth,
         minHeight: minHeight,
         maximizable: false,
+        resizable: true, 
+        fullScreenable: false,
         x: mainWindowState.x,
         y: mainWindowState.y,
         frame: false,
         useContentSize: false,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true
+        }      
     };
 
     // Create a copy of the 'normal' options
@@ -57,7 +56,7 @@ function createWindow() {
     splash = new BrowserWindow(splashOptions);
 
     splash.loadURL(url.format({
-        pathname: dragon ? `${__dirname}/../oldsplash.html` : `${__dirname}/../splashscreen.html`,
+        pathname: `${__dirname}/../splashscreen.html`,
         protocol: "file",
         slashes: true
     }));
@@ -120,7 +119,7 @@ app.on('ready', function () {
     win.webContents.on("did-finish-load", () => {
         if (isDev) return;
         request({
-                url: 'https://api.github.com/repos/Pwn2OwnLive/RuneBook/releases/latest',
+                url: 'https://api.github.com/repos/Soundofdarkness/RuneBook/releases/latest',
                 headers: {
                     'User-Agent': 'request'
                 }
@@ -179,7 +178,7 @@ ipcMain.on("update:do", (event, arg) => {
     }
     else {
         win.webContents.send('update:downloaded');
-        shell.openExternal(`https://github.com/Pwn2OwnLive/RuneBook/releases/download/v${latestv}/RuneBook-${latestv}-mac.zip`)
+        shell.openExternal(`https://github.com/Soundofdarkness/RuneBook/releases/download/v${latestv}/RuneBook-${latestv}-mac.zip`)
     }
 });
 

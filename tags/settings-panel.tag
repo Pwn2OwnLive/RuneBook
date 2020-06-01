@@ -3,7 +3,7 @@
     <div class="content">
       <div class="ui bottom attached label">
         RuneBook <a style="text-decoration: underline;" onclick="$('.changelog-modal').modal('show')">{ require('electron-is-dev') === true ? "DEV" : require('electron').remote.app.getVersion(); }</a>
-        <span style="float: right;"><a href="https://github.com/Pwn2OwnLive/RuneBook/issues" style="color: #555555;"><i class="bug icon"></i></a></span>
+        <span style="float: right;"><a href="https://github.com/Soundofdarkness/RuneBook/issues" style="color: #555555;"><i class="bug icon"></i></a></span>
       </div>
       <div class="ui form">
         <div class="grouped fields">
@@ -84,6 +84,13 @@
           <div class="ui toggle checkbox">
             <input type="checkbox" name="darktheme" onchange={ toggleDarkTheme } ref="darktheme">
             <label><i1-8n>settings.darktheme</i1-8n></label>
+          </div>
+
+          <h4 class="ui horizontal divider header">
+            <i class="red heart icon" style="padding-right:.5em;font-size:1em"></i><i1-8n>settings.about</i1-8n>
+          </h4>
+          <div class="field">
+            <span><i1-8n>settings.madeby</i1-8n> <a href="https://github.com/OrangeNote/Runebook">OrangeNote</a></span>
           </div>
         </div>
       </div>

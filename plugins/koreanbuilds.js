@@ -135,7 +135,7 @@ function _getPages(champion, callback) {
 var plugin = {
 	id: "koreanbuilds",
 	name: "Korean Builds",
-	active: true,
+	active: false,
 	bookmarks: false,
 
 	getPages(champion, callback) {

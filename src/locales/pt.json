@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Tens a certeza que queres remover esta página?",
   "settings.experimental": "Experimental",
   "settings.darktheme": "Tema Escuro",
-  "currentpage.retry": "Tentar de novo"
+  "currentpage.retry": "Tentar de novo",
+  "settings.about": "About",
+  "settings.madeby": "Made by"
 }
