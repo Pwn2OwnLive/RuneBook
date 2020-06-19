@@ -54,7 +54,9 @@ var state = {
 		cwd: "[default path]"
 	},
 
+	// we could cache this information
 	championsinfo: {},
+	runesreforgedinfo: [],
 
 	lolversions: [],
 

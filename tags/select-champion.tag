@@ -7,19 +7,12 @@
           
           <div class="column">
             <img draggable="false" class="ui tiny image circular"
-              src={opts.champion ? `https://ddragon.leagueoflegends.com/cdn/${this.version}/img/champion/${this.opts.champion}.png` : "./img/unknown.png"}>
+              src={opts.champion ? `https://ddragon.leagueoflegends.com/cdn/${freezer.get().lolversions[0]}/img/champion/${this.opts.champion}.png` : "./img/unknown.png"}>
             <img draggable="false" class="ui tiny-ring image circular" style="position: absolute; top: -2px; left: 12px;" src={opts.autochamp ? "./img/ring_active.png" : "./img/ring.png"}>
             <img if={ opts.autochamp && opts.champselect } draggable="false" class="ui tiny-spin image circular" style="position: absolute; top: -10px; left: 4px;" src="./img/ring_spinner.png">
           </div>
           
           <div class="column middle aligned">
-            
-            <!-- <div class="ui search selection disabled dropdown" onchange={chooseChampion}>
-              <input type="hidden" name="champion" class="myselect">
-              <i class="dropdown icon"></i>
-              <div class="default text">Champion name...</div>
-            </div> -->
-
             <div class="ui search loading fluid champion">
               <div class="ui icon input">
                 <input disabled class="prompt" type="text" placeholder="{ i18n.localise('champion.name') }..." onClick="this.select();">
@@ -70,6 +63,33 @@
     })
 
     freezer.on("championsinfo:set", () => {
+      var ddres = handleDDRes(freezer.get().championsinfo);
+
+      var search_el = $('.ui.search.champion');
+      search_el.removeClass("loading");
+      $('input', search_el).prop("disabled", false);
+
+      search_el.search({
+        source: ddres,
+        duration: 0,
+        searchDelay: 0,
+        showNoResults: false,
+        maxResults: 10,
+        fullTextSearch: true,
+        selectFirstResult: true,
+        searchFields: ['title', 'info'],
+        regExp: {
+          escape     : /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
+          beginsWith : '(?:\\s|^)'
+        },
+
+        onSelect: (data) => {
+          if(data) freezer.emit('champion:choose', data.id);
+        },
+      });
+
+      $('.ui.search.champion').removeClass("disabled");
+
       $("#autochamp-label").popup({
         position: "bottom right",
         popup: '.ui.popup',
@@ -102,82 +122,10 @@
       })
     })
 
-    freezer.on("version:set", (version) => {
-      this.version = version;
-
-      var request = require(`request`);
-      request.get(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`, (error, response, ddres) => {
-        if (error || response.statusCode != 200) return;
-        
-        ddres = handleDDRes2(JSON.parse(ddres));
-
-        var search_el = $('.ui.search.champion');
-        search_el.removeClass("loading");
-        $('input', search_el).prop("disabled", false);
-
-        search_el.search({
-          source: ddres,
-          duration: 0,
-          searchDelay: 0,
-          showNoResults: false,
-          maxResults: 10,
-          fullTextSearch: true,
-          selectFirstResult: true,
-          searchFields: ['title', 'info'],
-          regExp: {
-            escape     : /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
-            beginsWith : '(?:\\s|^)'
-          },
-
-          onSelect: (data) => {
-            if(data) freezer.emit('champion:choose', data.id);
-          },
-        });
-      });
-
-      $('.ui.dropdown').dropdown({
-
-        filterRemoteData: true,
-        saveRemoteData: false,
-        forceSelection: false,
-        fullTextSearch: false,
-        showOnFocus: false,
-        apiSettings: {
-          url: `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`,
-          onResponse: handleDDRes,
-          successTest: (res) => (res.success || false),
-        }
-      });
-
-      $('.ui.search.champion').removeClass("disabled");
-      $('.ui.dropdown').removeClass("disabled");
-    });
-
-    chooseChampion(evt) {
-      evt.preventUpdate = true;
-      var data = $('.ui.dropdown').dropdown('get value');
-      if(data) freezer.emit('champion:choose', data);
-    }
-
     function handleDDRes(ddres) {
-      var res = {
-        results: {}
-      };
-      if(!ddres || ddres.type != "champion") return res;
-      res.success = true;
-
-      $.each(ddres.data, function(index, item) {
-        res.results[item.id] = { value: item.id, name: item.name };
-      });
-
-      return res;
-    }
-
-    function handleDDRes2(ddres) {
       var res = [];
-      if(!ddres || ddres.type != "champion") return res;
-
-      $.each(ddres.data, function(index, item) {
+      
+      $.each(ddres, function(index, item) {
         res.push({ id: item.id, title: item.name });
         if(item.name == "Blitzcrank") res[res.length - 1].info = "22";
         if(item.name == "Warwick") res[res.length - 1].info = "urf";

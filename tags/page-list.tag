@@ -18,10 +18,9 @@
     </virtual>
   </h2>
 
-  <div if={ opts.current.champion } class="ui middle aligned relaxed divided list" style="height: 100%; overflow-y: auto;">
+  <div if={ opts.current.champion } class="ui middle aligned relaxed divided runepage list" style="height: 100%;">
     <div class="item" each={ page, key in opts.current.champ_data.pages }>
-      <div class="right floated content" data-key={ key }>
-        
+      <div class="buttons" data-key={ key }>
         <div class={ opts.connection.page && opts.connection.page.isEditable && opts.connection.summonerLevel >= 10 ? "ui icon button" : "ui icon button disabled" } data-key={key} onclick={ uploadPage } data-tooltip={ i18n.localise('pagelist.uploadpage') } data-position="left center" data-inverted="">
           <i class={ opts.lastuploadedpage.page == key && opts.lastuploadedpage.champion == opts.current.champion ? (opts.lastuploadedpage.loading ? "notched circle loading icon" : (opts.lastuploadedpage.valid === false ? "warning sign icon" : "checkmark icon")) : "upload icon" } data-key={key}></i>
         </div>
@@ -42,13 +41,19 @@
           <i class={opts.lastbookmarkedpage.page == key && opts.lastbookmarkedpage.champion == opts.current.champion ? "checkmark icon" : "bookmark icon"} data-key={key}></i>
         </div>
       </div>
-      <div class="ui image">
+
+      <div class="runeimages">
         <div each={ index in [0,1,2,3,4,5,6,7,8] } class="ui circular icon button tooltip page-list-tooltip" style="margin: 0; padding: 0; background-color: transparent; cursor: default;"
         data-html={findTooltip(page, index)}>
           <img draggable="false" class="ui mini circular image" src=./img/runesReforged/perk/{(page.selectedPerkIds[index] && page.selectedPerkIds[index] !== -1) ? page.selectedPerkIds[index] : "qm"}.png>
         </div>
       </div>
-      <div class="middle aligned content"><i class={ page.isValid === false ? "red warning sign icon" : "" }></i> {key}</div>
+
+      <div class="pagename">
+        <i class={ page.isValid === false ? "red warning sign icon" : "" }></i> {key}
+      </div>
+
+
     </div>
   </div>
 

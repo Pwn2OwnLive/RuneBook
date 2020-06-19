@@ -14,7 +14,7 @@ settings = new Store({
 		pathdiscovery: true,
 		autochamp: false,
 		lasttab: "local",
-		darktheme: false,
+		darktheme: null,
 	}
 });
 

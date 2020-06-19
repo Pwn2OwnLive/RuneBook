@@ -4,6 +4,15 @@ const request = require('request');
 var ws = null;
 var conn_data = null;
 
+// messages we listen to
+var message_filter = [
+    '/lol-champ-select/v1/session:Delete',
+	'/lol-champ-select/v1/session:Update',
+	'/lol-perks/v1/currentpage:Update',
+	'/lol-perks/v1/perks:Update',
+	'/lol-summoner/v1/current-summoner:Update'
+];
+
 function bind(data) {
 	conn_data = data;
 	ws = new WebSocket(`wss://${data.username}:${data.password}@${data.address}:${data.port}/`, "wamp", {
@@ -33,8 +42,12 @@ function bind(data) {
 		}
 		if(res[1] == "OnJsonApiEvent") {
 			var evt = res[2];
-			//console.log(`${evt.uri}:${evt.eventType}`);
-			freezer.emit(`${evt.uri}:${evt.eventType}`, evt.data);
+			var url = `${evt.uri}:${evt.eventType}`;
+
+			if (message_filter.includes(url)){
+				//console.log(url);
+				freezer.emit(url, evt.data);
+			}
 		}
 	});
 
@@ -52,6 +65,9 @@ var methods = {};
 ["post", "put", "get", "del"].forEach(function(method) {
 	methods[method] = function(endpoint, body) {
 		return new Promise(resolve => {	
+			if(ws == null)
+				return;
+
 			var options = {
 				url: `${conn_data.protocol}://${conn_data.address}:${conn_data.port}${endpoint}`,
 				auth: {

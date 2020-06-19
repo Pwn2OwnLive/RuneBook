@@ -1,75 +1,13 @@
 var cheerio = require('cheerio');
 var rp = require('request-promise-native');
+const { getPerksMapMap } = require('./utils');
 
 const baseUrl = "https://www.metasrc.com/";
 const rankFilter = "?ranks=platinum,diamond,master,grandmaster,challenger";
 const modesToIgnore = ['tft'];
 
-var perksMap = {
-    "electrocute": 8112,
-    "predator": 8124,
-    "darkharvest": 8128,
-    "hailofblades": 9923,
-    "cheapshot": 8126,
-    "greenterror_tasteofblood": 8139,
-    "suddenimpact": 8143,
-    "zombieward": 8136,
-    "ghostporo": 8120,
-    "eyeballcollection": 8138,
-    "ravenoushunter": 8135,
-    "ingenioushunter": 8134,
-    "relentlesshunter": 8105,
-    "ultimatehunter": 8106,
-    "glacialaugment": 8351,
-    "unsealedspellbook": 8360,
-    "masterkey": 8358,
-    "hextechflashtraption": 8306,
-    "magicalfootwear": 8304,
-    "perfecttiming": 8313,
-    "futuresmarket": 8321,
-    "miniondematerializer": 8316,
-    "biscuitdelivery": 8345,
-    "cosmicinsight": 8347,
-    "approachvelocity": 8410,
-    "timewarptonic": 8352,
-    "presstheattack": 8005,
-    "lethaltempotemp": 8008,
-    "fleetfootwork": 8021,
-    "conqueror": 8010,
-    "overheal": 9101,
-    "triumph": 9111,
-    "presenceofmind": 8009,
-    "legendalacrity": 9104,
-    "legendtenacity": 9105,
-    "legendbloodline": 9103,
-    "coupdegrace": 8014,
-    "cutdown": 8017,
-    "laststand": 8299,
-    "graspoftheundying": 8437,
-    "veteranaftershock": 8439,
-    "guardian": 8465,
-    "demolish": 8446,
-    "fontoflife": 8463,
-    "mirrorshell": 8401,
-    "conditioning": 8429,
-    "secondwind": 8444,
-    "boneplating": 8473,
-    "overgrowth": 8451,
-    "revitalize": 8453,
-    "unflinching": 8242,
-    "summonaery": 8214,
-    "arcanecomet": 8229,
-    "phaserush": 8230,
-    "pokeshield": 8224,
-    "manaflowband": 8226,
-    "6361": 8275,
-    "transcendence": 8210,
-    "celeritytemp": 8234,
-    "absolutefocus": 8233,
-    "scorch": 8237,
-    "waterwalking": 8232,
-    "gatheringstorm": 8236,
-
+var perksMap = { };
+var statsMap = {
     "statmodshealthscalingicon": 5001,
     "statmodsarmoricon": 5002,
     "statmodsmagicresicon": 5003,
@@ -108,8 +46,10 @@ async function getPage(requestUri, champInfo) {
         }
 
         page.name = "[" + urlParts[1].toUpperCase() + "] " + champInfo.name;
-        if (urlParts.length > 4)
-            page.name += " " + urlParts[4].toUpperCase();
+        if (urlParts.length > 4){
+            var lane = urlParts[4];
+            page.name += ` ${lane[0].toUpperCase()}${lane.slice(1)}`;
+        }
 
         var response = await getResponseFromUrl(modeUrlBase, "Error when determining the rune page");
         var $ = cheerio.load(response.body);
@@ -134,6 +74,17 @@ async function getPage(requestUri, champInfo) {
     return page;
 }
 
+function getPerksMap(){
+    if(Object.keys(perksMap).length == 0){
+        for (const [key, value] of Object.entries(getPerksMapMap('icon'))) {
+            var fileName = key.split('/').pop().replace(/\.[^/.]+$/, "");
+            perksMap[fileName.toLowerCase()] = value;
+          }
+    }
+    
+    return Object.assign(perksMap, statsMap);
+}
+
 function getIdFromImageUrl(url) {
     var perkId = -1;
 
@@ -142,7 +93,7 @@ function getIdFromImageUrl(url) {
     if (url.includes('perks')) {
         perkId = parseInt(fileName);
     } else {
-        perkId = perksMap[fileName];
+        perkId = getPerksMap()[fileName];
     }
 
     return perkId || -1;
@@ -201,17 +152,33 @@ async function _getPages(champion, callback) {
     try {
         var gameModeUrls = await getModeUrls(champInfo.id);
 
+        // determine last 3 LoL versions
+        var versions = freezer.get().lolversions.slice(0,10).map(versItem => {
+            return versItem.split('.').slice(0, 2).join('.');
+        }).filter(function(elem, index, self) {
+            return index === self.indexOf(elem);
+        }).slice(0,3);
+
         for (var i = 0, len = gameModeUrls.length; i < len; i++) {
             var response = await getResponseFromUrl(gameModeUrls[i], "Error when determining lanes");
             var $ = cheerio.load(response.body);
 
-            $('div[id=splash-content] div > div > div > a').each(async (index, elem) => {
-                var runePage = await getPage($(elem).attr('href').trim(), champInfo);
+            // Determine available versions
+            let modeVersions = $('select[id=patch] > option').map(function() {
+                return $(this).text().trim();
+            }).toArray()[0];
 
+            if(!versions.includes(modeVersions))
+                continue;
+
+            for (let [index, elem] of Object.entries($('div[id=splash-content] > div > div > div > a'))){
+                if(isNaN(index))
+                    continue;
+                var runePage = await getPage($(elem).attr('href').trim(), champInfo);
                 if (runePage) {
                     runePages.pages[runePage.name] = runePage;
                 }
-            });
+            }          
         }
 
         const ordered = {};
@@ -229,7 +196,7 @@ async function _getPages(champion, callback) {
 
 var plugin = {
     id: "metasrc",
-    name: "Meta Src",
+    name: "METAsrc",
     active: true,
     bookmarks: false,
 

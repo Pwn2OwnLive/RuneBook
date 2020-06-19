@@ -1,101 +1,12 @@
 var request = require('request');
 var cheerio = require('cheerio');
+const { getStylesMap, getPerksMapMap } = require('./utils');
 
 var url = "http://champion.gg";
 
-var stylesMap = {
-	"Precision":8000,
-	"Domination":8100,
-	"Sorcery":8200,
-	"Resolve":8400,
-	"Inspiration":8300
-};
-
-var perksMap = {
-    // Precision_Tier_1
-    "Press the Attack": 8005,
-    "Lethal Tempo": 8008,
-    "Fleet Footwork": 8021,
-    "Conqueror": 8010,
-    // Precision_Tier_2
-    "Overheal": 9101,
-    "Triumph": 9111,
-    "Presence of Mind": 8009,
-    // Precision_Tier_3
-    "Legend: Alacrity": 9104,
-    "Legend: Tenacity": 9105,
-    "Legend: Bloodline": 9103,
-    // Precision_Tier_4
-    "Coup de Grace": 8014,
-    "Cut Down": 8017,
-    "Last Stand": 8299,
-    // Domination_Tier_1
-    "Electrocute": 8112,
-    "Predator": 8124,
-    "Dark Harvest": 8128,
-    "Hail of Blades": 9923,
-    // Domination_Tier_2
-    "Cheap Shot": 8126,
-    "Taste of Blood": 8139,
-    "Sudden Impact": 8143,
-    // Domination_Tier_3
-    "Zombie Ward": 8136,
-    "Ghost Poro": 8120,
-    "Eyeball Collection": 8138,
-    // Domination_Tier_4
-    "Ravenous Hunter": 8135,
-    "Ingenious Hunter": 8134,
-    "Relentless Hunter": 8105,
-    "Ultimate Hunter": 8106,
-    // Sorcery_Tier_1
-    "Summon Aery": 8214,
-    "Arcane Comet": 8229,
-    "Phase Rush": 8230,
-    // Sorcery_Tier_2
-    "Nullifying Orb": 8224,
-    "Manaflow Band": 8226,
-    "Nimbus Cloak": 8275,
-    // Sorcery_Tier_3
-    "Transcendence": 8210,
-    "Celerity": 8234,
-    "Absolute Focus": 8233,
-    // Sorcery_Tier_4
-    "Scorch": 8237,
-    "Waterwalking": 8232,
-    "Gathering Storm": 8236,
-    // Resolve_Tier_1
-    "Grasp of the Undying": 8437,
-    "Aftershock": 8439,
-    "Guardian": 8465,
-    // Resolve_Tier_2
-    "Demolish": 8446,
-    "Font of Life": 8463,
-    "Shield Bash": 8401,
-    // Resolve_Tier_3
-    "Conditioning": 8429,
-    "Second Wind": 8444,
-    "Bone Plating": 8473,
-    // Resolve_Tier_4
-    "Overgrowth": 8451,
-    "Revitalize": 8453,
-    "Unflinching": 8242,
-    // Inspiration_Tier_1
-    "Glacial Augment": 8351,
-    "Unsealed Spellbook": 8360,
-    "Prototype: Omnistone": 8358,
-    // Inspiration_Tier_2
-    "Hextech Flashtraption": 8306,
-    "Magical Footwear": 8304,
-    "Perfect Timing": 8313,
-    // Inspiration_Tier_3
-    "Future's Market": 8321,
-    "Minion Dematerializer": 8316,
-    "Biscuit Delivery": 8345,
-    // Inspiration_Tier_4
-    "Cosmic Insight": 8347,
-    "Approach Velocity": 8410,
-    "Time Warp Tonic": 8352,
-    // Shards
+var stylesMap = {};
+var perksMap = {};
+var statsMap = {
     "Scaling Health": 5001,
     "Armor": 5002,
     "Magic Resist": 5003,
@@ -130,6 +41,8 @@ function exctractPage(html, champion, rec, callback, pageType) {
 				}
 			})
 		}
+
+		stylesMap = Object.keys(stylesMap).length == 0 ? getStylesMap() : stylesMap;
 		var rune = $(this).text();
 		rune = rune.replace(".png", "");
 		console.log(rune)
@@ -143,7 +56,9 @@ function exctractPage(html, champion, rec, callback, pageType) {
 		}
 		else runecount++;
 		
-		pages[pages.length - 1].selectedPerkIds[runecount % 9] = perksMap[rune];
+		perksMap = Object.keys(perksMap).length == 0 ? getPerksMapMap() : perksMap;
+		let perksMapMapped = Object.assign(perksMap, statsMap);
+		pages[pages.length - 1].selectedPerkIds[runecount % 9] = perksMapMapped[rune];
 	});
 
 	if(rec) {

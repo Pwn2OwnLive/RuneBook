@@ -1,5 +1,151 @@
+/* [START] of styles for settings-panel.tag */
+
+.ui.modal.settings-modal > .content {
+    /* For the entire settings panel */
+    background: #191D24 !important;
+}
+
+.ui.inverted.dimmer {
+    /* Darker background when settings modal is open */
+    background: rgba(64,64,64,.85);
+}
+
+.field > label > i1-8n,
+.field > span > i1-8n,
+span > i1-8n,
+.ui.toggle.checkbox > label > i1-8n {
+    /* Text from locales */
+    color: #d8cfbd !important;
+}
+
+.ui.horizontal.divider.header {
+    /* For the settings headers */
+    color: #bd9d5e !important;
+}
+
+.ui.selection.dropdown.lang {
+    /* Language dropdown */
+    background: black !important;
+    border-color: grey !important;
+    color: #d8cfbd !important;
+}
+
+.ui.selection.visible.dropdown > .text:not(.default) {
+    /* For Text on language label not to disappear when dropdown is visible */
+    color: #d8cfbd !important;
+}
+
+.ui.selection.dropdown.lang > .menu > .item {
+    /* Languages when dropdown enabled */
+    background: #191D24;
+    border-color: grey !important;
+    color: #d8cfbd !important;
+}
+
+.ui.dropdown .menu > .item:hover {
+    /* Highlight language on hover */
+    background: grey !important;
+}
+
+#displayleaguepath {
+    /* League path display */
+    background: black !important;
+    color: #d8cfbd !important;
+}
+
+#changeleaguelabel {
+    /* Restart Runebook label */
+    background: #71552B !important;
+    color: #d8cfbd !important;
+}
+
+#displaypath {
+    /* Local rune page file */
+    background: black !important;
+    color: #d8cfbd !important;
+}
+
+.ui.bottom.attached.label {
+    /* For the footer */
+    background: black !important;
+    color: #d8cfbd !important;
+}
+
+.bug.icon {
+    /* For the bug icon */
+    color: #d8cfbd !important;
+}
+
+/* [END] of styles for settings-panel.tag */
+
 body {
-	background: #191D24;
+    background: #191D24;
+}
+
+.runepage.list > .item {
+	display: flex !important;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.runepage.list > .item > .runeimages {
+	flex: 0 0 auto;
+	order: 1;
+}
+
+.runepage.list > .item > .pagename {
+	flex: 1 1 auto;
+	padding: 0 1em;
+	order: 2;
+}
+
+.runepage.list > .item > .buttons {
+	flex: 0 0 auto;
+	order: 3;
+}
+
+runebook {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+select-champion {
+	margin-bottom: -14px;
+}
+
+chapters-segment, 
+chapters-segment > .ui.container {
+	flex: 1; 
+	display: flex; 
+	flex-direction: column;
+}
+
+#pagelist-limiter {
+	flex: 1; 
+	display: flex; 
+	flex-direction: column; 
+	height: 150px; 
+	overflow: hidden;
+}
+
+#grid-wrapper {
+	flex: 1; 
+	overflow: auto;
+}
+
+#grid-wrapper::-webkit-scrollbar-track {
+    background: none !important;
+}
+
+#grid-wrapper::-webkit-scrollbar-thumb,
+#grid-wrapper::-webkit-scrollbar-thumb:window-inactive {
+    background: #71552B !important;
+}
+
+#grid-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #BD9D5E !important;
 }
 
 .ui.secondary.pointing.menu {
@@ -107,18 +253,7 @@ runebook .ui.horizontal.divider {
 
 chapters-segment .ui.active.inverted.dimmer {
 	background: #191D24;
-}
-
-page-list ::-webkit-scrollbar-thumb {
-    background: #71552B;
-}
-
-page-list ::-webkit-scrollbar-thumb:window-inactive {
-    background: #71552B;
-}
-
-page-list ::-webkit-scrollbar-thumb:hover {
-    background: #BD9D5E;
+	z-index: 0;
 }
 
 .ui.divided.list>.item {
@@ -155,35 +290,20 @@ page-list ::-webkit-scrollbar-thumb:hover {
 	color: #d8cfbd;
 }
 
-current-page .ui.button {
+.ui.button {
 	background: #71552B;
+	margin-right: 10px;
 }
 
-page-list .ui.button {
-	background: #71552B;
-}
-
-current-page .ui.button:hover {
+.ui.button:hover {
 	background: #BD9D5E;
 }
 
-page-list .ui.button:hover {
-	background: #BD9D5E;
-}
-
-current-page .ui.button:focus {
+.ui.button:focus {
 	background: #71552B;
 }
 
-page-list .ui.button:focus {
-	background: #71552B;
-}
-
-current-page .ui.button:active {
-	background: #BD9D5E;
-}
-
-page-list .ui.button:active {
+.ui.button:active {
 	background: #BD9D5E;
 }
 
@@ -207,4 +327,41 @@ page-list .ui.button:active {
 	border-right: none !important;
 	border-top: 1px solid #71552B !important;
 	box-shadow: none !important;
+}
+
+.changelog-modal > .header {
+	background: #191D24 !important;
+	color: #bd9d5e !important;
+	border-bottom-color: #bd9d5e !important;
+	text-align: center;
+}
+
+.changelog-modal > .content {
+	background: #191D24 !important;
+	color: #d8cfbd !important;
+}
+
+.changelog-modal > .content > img {
+	width: 66% !important;
+}
+
+.changelog-modal .ui.horizontal.divider {
+	color: #bd9d5e !important;
+}
+
+.changelog-modal .icon {
+	color: #d8cfbd !important;
+}
+
+.ui.modal .scrolling::-webkit-scrollbar-track {
+	background: none !important;
+}
+
+.ui.modal .scrolling::-webkit-scrollbar-thumb,
+.ui.modal .scrolling::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.ui.modal .scrolling::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.15) !important;
 }

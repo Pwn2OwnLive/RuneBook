@@ -2,6 +2,72 @@ body {
 	background: #ffffff;
 }
 
+runebook {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+select-champion {
+	margin-bottom: -14px;
+}
+
+chapters-segment, 
+chapters-segment > .ui.container {
+	flex: 1; 
+	display: flex; 
+	flex-direction: column;
+}
+
+#pagelist-limiter {
+	flex: 1; 
+	display: flex; 
+	flex-direction: column; 
+	height: 150px; 
+	overflow: hidden;
+}
+
+#grid-wrapper {
+	flex: 1; 
+	overflow: auto;
+}
+
+#grid-wrapper::-webkit-scrollbar-track {
+    background: none !important;
+}
+
+#grid-wrapper::-webkit-scrollbar-thumb,
+#grid-wrapper::-webkit-scrollbar-thumb:window-inactive {
+    background: #BD9D5E !important;
+}
+
+#grid-wrapper::-webkit-scrollbar-thumb:hover {
+	background: #71552B !important;
+}
+
+.runepage.list > .item {
+	display: flex !important;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.runepage.list > .item > .runeimages {
+	flex: 0 0 auto;
+	order: 1;
+}
+
+.runepage.list > .item > .pagename {
+	flex: 1 1 auto;
+	padding: 0 1em;
+	order: 2;
+}
+
+.runepage.list > .item > .buttons {
+	flex: 0 0 auto;
+	order: 3;
+}
+
 .ui.secondary.pointing.menu {
 	background: #ffffff;
 	border-bottom: 1px solid #BD9D5E;
@@ -107,18 +173,7 @@ runebook .ui.horizontal.divider {
 
 chapters-segment .ui.active.inverted.dimmer {
 	background: #ffffff;
-}
-
-page-list ::-webkit-scrollbar-thumb {
-    background: #71552B;
-}
-
-page-list ::-webkit-scrollbar-thumb:window-inactive {
-    background: #71552B;
-}
-
-page-list ::-webkit-scrollbar-thumb:hover {
-    background: #BD9D5E;
+	z-index: 0;
 }
 
 .ui.divided.list>.item {
@@ -151,35 +206,19 @@ page-list ::-webkit-scrollbar-thumb:hover {
 	color: #191D24;
 }
 
-current-page .ui.button {
+.ui.button {
 	background: #BD9D5E;
 }
 
-page-list .ui.button {
-	background: #BD9D5E;
-}
-
-current-page .ui.button:hover {
+.ui.button:hover {
 	background: #C7B185;
 }
 
-page-list .ui.button:hover {
-	background: #C7B185;
-}
-
-current-page .ui.button:focus {
+.ui.button:focus {
 	background: #BD9D5E;
 }
 
-page-list .ui.button:focus {
-	background: #BD9D5E;
-}
-
-current-page .ui.button:active {
-	background: #C7B185;
-}
-
-page-list .ui.button:active {
+.ui.button:active {
 	background: #C7B185;
 }
 
@@ -203,4 +242,40 @@ page-list .ui.button:active {
 	border-right: none !important;
 	border-top: 1px solid #BD9D5E !important;
 	box-shadow: none !important;
+}
+
+.changelog-modal > .header {
+	background: #ffffff !important;
+	color: #000000de !important;
+	text-align: center;
+}
+
+.changelog-modal > .content {
+	background: #ffffff !important;
+	color: #000000de !important;
+}
+
+.changelog-modal > .content > img {
+	width: 66% !important;
+}
+
+.changelog-modal .ui.horizontal.divider {
+	color: #191D24 !important;
+}
+
+.changelog-modal .icon {
+	color: #191D24 !important;
+}
+
+.ui.modal .scrolling::-webkit-scrollbar-track {
+	background: none !important;
+}
+
+.ui.modal .scrolling::-webkit-scrollbar-thumb,
+.ui.modal .scrolling::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0, 0, 0, .25) !important;
+}
+
+.ui.modal .scrolling::-webkit-scrollbar-thumb:hover {
+	background: rgba(0, 0, 0, .15) !important;
 }

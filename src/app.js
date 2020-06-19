@@ -1,6 +1,11 @@
 var settings = require('./settings');
 var freezer = require('./state');
 
+if(settings.get("darktheme") == null){
+	const { nativeTheme } = require('electron').remote.require('electron')
+	settings.set("darktheme", nativeTheme.shouldUseDarkColors ?? false);
+}
+
 freezer.get().configfile.set({
 	name: settings.get("config.name") + settings.get("config.ext"),
 	cwd: settings.get("config.cwd"),
@@ -71,7 +76,7 @@ freezer.on("changelog:ready", () => {
 	var appVersion = require('electron').remote.app.getVersion();
 	console.log(appVersion, settings.get("changelogversion"))
 	if(settings.get("changelogversion") != appVersion) {
-		// freezer.get().set("showchangelog", true);
+		freezer.get().set("showchangelog", true);
 		settings.set("changelogversion", appVersion);
 	}
 });
@@ -86,7 +91,14 @@ request('https://ddragon.leagueoflegends.com/api/versions.json', function (error
 });
 
 freezer.on('version:set', (ver) => {
-	request('http://ddragon.leagueoflegends.com/cdn/'+ver+'/data/en_US/champion.json', function(error, response, data) {
+	request('https://ddragon.leagueoflegends.com/cdn/'+ver+'/data/en_US/runesReforged.json', function(error, response, data) {
+		if(!error && response && response.statusCode == 200){
+			freezer.get().set('runesreforgedinfo', JSON.parse(data));
+		}
+		else throw Error("Couldn't fetch runesReforged.json from ddragon.")
+	});
+
+	request('https://ddragon.leagueoflegends.com/cdn/'+ver+'/data/en_US/champion.json', function(error, response, data) {
 		if(!error && response && response.statusCode == 200){
 			freezer.get().set('championsinfo', JSON.parse(data).data);
 			freezer.emit("championsinfo:set");
@@ -142,20 +154,19 @@ freezer.on('champion:choose', (champion) => {
 	state = freezer.get();
 
 	plugins[state.tab.active].getPages(champion, (res) => {
-		if(freezer.get().tab.active != state.tab.active) return;
-		freezer.get().current.set({ champion, champ_data: res || {pages: {}} });
-		freezer.get().tab.set({ loaded: true });
-
 		// Cache results obtained from a remote source
 		if(freezer.get().plugins.remote[plugin])
 			freezer.get().plugins.remote[plugin].cache.set(champion, res);
+
+		if(freezer.get().tab.active != state.tab.active) return;
+		freezer.get().current.set({ champion, champ_data: res || {pages: {}} });
+		freezer.get().tab.set({ loaded: true });
 	});
 });
 
 freezer.on("tab:switch", (tab) => {
 	freezer.get().tab.set({ active: tab, loaded: true });
 	settings.set("lasttab", tab);
-
 
 	var state = freezer.get();
 
@@ -175,13 +186,13 @@ freezer.on("tab:switch", (tab) => {
 
 	if(!state.current.champion) return;
 	plugins[state.tab.active].getPages(state.current.champion, (res) => {
-		if(freezer.get().tab.active != state.tab.active) return;
-		freezer.get().current.set({ champion: freezer.get().current.champion, champ_data: res || {pages: {}} });
-		freezer.get().tab.set({ loaded: true });
-
 		// Cache results obtained from a remote source
 		if(freezer.get().plugins.remote[plugin])
 			freezer.get().plugins.remote[plugin].cache.set(champion, res);
+		
+		if(freezer.get().tab.active != state.tab.active) return;
+		freezer.get().current.set({ champion: freezer.get().current.champion, champ_data: res || {pages: {}} });
+		freezer.get().tab.set({ loaded: true });
 	});
 });
 
@@ -420,6 +431,7 @@ connector.on('connect', (data) => {
 connector.on('disconnect', () => {
 	console.log("client closed");
 	api.destroy();
+	freezer.get().connection.set({ page: null, summonerLevel: 0 });
 	freezer.get().session.set({ connected: false, state: "" });
 	freezer.get().set("champselect", false);
 });

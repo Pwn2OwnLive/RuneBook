@@ -38,5 +38,7 @@
   "pagelist.confirmdialog": "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν τη σελίδα;",
   "settings.experimental": "Πειραματικό",
   "settings.darktheme": "Σκουρόχρωμο θέμα",
-  "currentpage.retry": "Προσπάθησε ξανά"
+  "currentpage.retry": "Προσπάθησε ξανά",
+  "settings.about": "Αναφορικά",
+  "settings.madeby": "Δημιουργήθηκε από"
 }
